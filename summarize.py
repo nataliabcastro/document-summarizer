@@ -3,6 +3,7 @@ from pathlib import Path
 from langdetect import detect, DetectorFactory
 from checker import missing_numbers
 from llm import call_model
+from reader import read_file
 
 DetectorFactory.seed = 0   # makes the detection give the same answer every time
 
@@ -53,7 +54,7 @@ def summarize_text(text: str, target: str = "6 to 10 bullet points") -> str:
     return keep_bullets(call_model(system, user))
 
 if __name__ == "__main__":
-    text = Path(sys.argv[1]).read_text(encoding="utf-8")
+    text = read_file(sys.argv[1])
     summary = summarize_text(text)
     print(summary)
     messages = MESSAGES.get(detect_language(text), MESSAGES["English"])
